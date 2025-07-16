@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>能源大挑战</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .game-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #question-text {
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            color: #555;
+            min-height: 80px; /* 确保问题区域有足够空间 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .option-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .option-button:hover {
+            background-color: #0056b3;
+        }
+        .option-button.correct {
+            background-color: #28a745;
+        }
+        .option-button.wrong {
+            background-color: #dc3545;
+        }
+        #feedback {
+            font-size: 1.2em;
+            margin-top: 20px;
+            min-height: 30px; /* 确保反馈区域有足够空间 */
+        }
+        #score {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #333;
+        }
+        #next-button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none; /* 初始隐藏 */
+            transition: background-color 0.3s ease;
+        }
+        #next-button:hover {
+            background-color: #5a6268;
+        }
+        .final-score-container {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #28a745;
+            margin-top: 30px;
+        }
+        .restart-button {
+            background-color: #ffc107;
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .restart-button:hover {
+            background-color: #e0a800;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>能源大挑战</h1>
+        <div id="game-screen">
+            <div id="question-text"></div>
+            <div class="options-container" id="options"></div>
+            <div id="feedback"></div>
+            <div id="score">得分: 0</div>
+            <button id="next-button">下一题</button>
+        </div>
+        <div id="end-screen" style="display: none;">
+            <div class="final-score-container">
+                恭喜您完成所有挑战！您的最终得分是：<span id="final-score"></span>
+            </div>
+            <button class="restart-button" onclick="startGame()">重新开始</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "以下哪种能源属于可再生能源？",
+                options: ["煤", "天然气", "风能", "核能"],
+                answer: "风能"
+            },
+            {
+                question: "太阳能通常转化为什么形式的能来为我们供电？",
+                options: ["机械能", "化学能", "电能", "核能"],
+                answer: "电能"
+            },
+            {
+                question: "燃煤发电过程中，煤的化学能主要转化为哪种能？",
+                options: ["光能", "电能", "声能", "核能"],
+                answer: "电能"
+            },
+            {
+                question: "水电站利用水的什么能来发电？",
+                options: ["热能", "化学能", "势能/动能", "光能"],
+                answer: "势能/动能"
+            },
+            {
+                question: "波浪能是一种利用海洋运动产生的可再生能源，它的主要能量形式是？",
+                options: ["热能", "机械能", "化学能", "核能"],
+                answer: "机械能"
+            },
+            {
+                question: "核电站利用原子核裂变释放出巨大的能量，这种能量形式是什么？",
+                options: ["化学能", "光能", "核能", "机械能"],
+                answer: "核能"
+            },
+            {
+                question: "生物质能来源于生物体，通过燃烧等方式转化为哪种主要能源形式？",
+                options: ["电能", "热能", "光能", "机械能"],
+                answer: "热能"
+            },
+            {
+                question: "以下哪种能源属于不可再生能源？",
+                options: ["太阳能", "生物质能", "石油", "水能"],
+                answer: "石油"
+            },
+            {
+                question: "当电灯泡发光时，电能主要转化为什么形式的能？",
+                options: ["声能", "机械能", "光能和热能", "化学能"],
+                answer: "光能和热能"
+            },
+            {
+                question: "风力发电是把风的什么能转化为电能？",
+                options: ["热能", "化学能", "机械能", "核能"],
+                answer: "机械能"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answeredThisQuestion = false;
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options');
+        const feedbackElement = document.getElementById('feedback');
+        const scoreElement = document.getElementById('score');
+        const nextButton = document.getElementById('next-button');
+        const gameScreen = document.getElementById('game-screen');
+        const endScreen = document.getElementById('end-screen');
+        const finalScoreElement = document.getElementById('final-score');
+
+        function startGame() {
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreElement.textContent = `得分: ${score}`;
+            gameScreen.style.display = 'block';
+            endScreen.style.display = 'none';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            answeredThisQuestion = false;
+            feedbackElement.textContent = '';
+            nextButton.style.display = 'none';
+
+            if (currentQuestionIndex >= questions.length) {
+                endGame();
+                return;
+            }
+
+            const currentQuestion = questions[currentQuestionIndex];
+            questionTextElement.textContent = currentQuestion.question;
+            optionsContainer.innerHTML = ''; // 清空之前的选项
+
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('option-button');
+                button.addEventListener('click', () => selectOption(option, currentQuestion.answer, button));
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectOption(selectedOption, correctAnswer, clickedButton) {
+            if (answeredThisQuestion) {
+                return; // 如果已经回答过，则不处理
+            }
+            answeredThisQuestion = true;
+
+            const allOptionButtons = optionsContainer.querySelectorAll('.option-button');
+            allOptionButtons.forEach(button => {
+                button.disabled = true; // 禁用所有按钮
+                if (button.textContent === correctAnswer) {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (selectedOption === correctAnswer) {
+                feedbackElement.textContent = '恭喜你，回答正确！';
+                feedbackElement.style.color = '#28a745';
+                score++;
+            } else {
+                feedbackElement.textContent = `很遗憾，回答错误。正确答案是：“${correctAnswer}”`;
+                feedbackElement.style.color = '#dc3545';
+                clickedButton.classList.add('wrong');
+            }
+            scoreElement.textContent = `得分: ${score}`;
+            nextButton.style.display = 'block'; // 显示下一题按钮
+        }
+
+        nextButton.addEventListener('click', () => {
+            currentQuestionIndex++;
+            showQuestion();
+        });
+
+        function endGame() {
+            gameScreen.style.display = 'none';
+            endScreen.style.display = 'block';
+            finalScoreElement.textContent = `${score} / ${questions.length}`;
+        }
+
+        // 首次加载时启动游戏
+        startGame();
+    </script>
+</body>
+</html>
