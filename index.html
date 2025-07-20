@@ -3,270 +3,840 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>能源大挑战</title>
+    <title>能源知识挑战</title>
     <style>
+        /* Basic body styling */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Inter', Arial, sans-serif; /* Using Inter font */
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5; /* Light grey background */
+            color: #333;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Align to top for longer content */
             min-height: 100vh;
+        }
+
+        /* Main container styling */
+        .container {
+            max-width: 950px;
+            width: 100%;
+            margin: 20px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px; /* More rounded corners */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Softer shadow */
+            overflow: hidden; /* Ensure content stays within bounds */
+        }
+
+        /* Heading styling */
+        h1 {
+            text-align: center;
+            color: #1a73e8; /* Google blue */
+            margin-bottom: 20px; /* Reduced margin to make space for score */
+            font-size: 2.2em;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* Score display styling */
+        #score-display {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00796b; /* Teal for score */
+            margin-bottom: 25px;
+            padding: 10px;
+            background-color: #e0f2f1; /* Light teal background */
+            border-radius: 8px;
+            border: 1px solid #b2dfdb;
+        }
+
+        /* Tabs navigation styling */
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap; /* Allow tabs to wrap to the next line */
+            justify-content: space-between; /* Distribute buttons evenly */
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 25px;
+            padding-bottom: 5px;
+            /* Remove overflow-x and scrollbar hiding as wrapping handles it */
+            /* overflow-x: auto; */
+            /* -webkit-overflow-scrolling: touch; */
+            /* scrollbar-width: none; */
+            /* -ms-overflow-style: none; */
+        }
+        /* Hide scrollbar for Chrome, Safari, Opera (if overflow-x is re-enabled) */
+        /* .tabs-nav::-webkit-scrollbar {
+            display: none;
+        } */
+
+        /* Tab button styling */
+        .tab-button {
+            background-color: #f8f9fa; /* Lighter background */
+            border: none;
+            padding: 14px 22px; /* More padding */
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: 500;
+            color: #5f6368; /* Darker grey text */
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 8px 8px 0 0; /* Rounded top corners */
+            flex-shrink: 0; /* Prevent buttons from shrinking */
+            margin-right: 8px; /* Slightly increased margin for wrapping */
+            margin-bottom: 5px; /* Add margin for vertical spacing when wrapped */
+        }
+        .tab-button:last-child {
+            margin-right: 0;
+        }
+        .tab-button:hover {
+            background-color: #e8eaed; /* Slightly darker on hover */
+            color: #202124;
+        }
+        .tab-button.active {
+            background-color: #1a73e8; /* Active tab color */
+            color: white;
+            box-shadow: 0 -2px 8px rgba(26, 115, 232, 0.3); /* Subtle shadow for active tab */
+            border-bottom: 2px solid #1a73e8; /* Emphasize active tab */
+        }
+
+        /* Tab panel styling */
+        .tab-panel {
+            display: none; /* Hidden by default */
+            padding: 15px 0;
+        }
+        .tab-panel.active {
+            display: block; /* Show active panel */
+        }
+
+        /* Section headings within tabs */
+        h2 {
+            color: #3c4043;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Question section styling */
+        .question-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #fdfdfd;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+        }
+        .question-section:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Question type label */
+        .question-type {
+            font-weight: bold;
+            color: #757575;
+            margin-bottom: 12px;
+            display: block;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+        }
+
+        /* Question text styling */
+        .question-text {
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            color: #202124;
+            font-weight: 500;
+        }
+
+        /* Options list styling for multiple choice */
+        .options-list {
+            list-style-type: none; /* Remove default list style */
+            padding: 0;
             margin: 0;
         }
-        .game-container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 90%;
-            max-width: 600px;
+        .options-list li {
+            margin-bottom: 8px;
         }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        #question-text {
-            font-size: 1.5em;
-            margin-bottom: 25px;
-            color: #555;
-            min-height: 80px; /* 确保问题区域有足够空间 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .option-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 5px;
-            font-size: 1.1em;
+        .options-list label {
+            display: block;
+            background-color: #eff3f6;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.2s ease;
         }
-        .option-button:hover {
-            background-color: #0056b3;
+        .options-list label:hover {
+            background-color: #e6eaf0;
         }
-        .option-button.correct {
-            background-color: #28a745;
+        .options-list input[type="radio"] {
+            margin-right: 10px;
+            accent-color: #1a73e8; /* Custom radio button color */
         }
-        .option-button.wrong {
-            background-color: #dc3545;
+
+        /* Fill-in-blank input styling */
+        .fill-blank-input {
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 1em;
+            margin: 0 5px;
+            width: 120px; /* Fixed width for blanks */
+            box-sizing: border-box;
         }
-        #feedback {
-            font-size: 1.2em;
-            margin-top: 20px;
-            min-height: 30px; /* 确保反馈区域有足够空间 */
-        }
-        #score {
-            font-size: 1.3em;
-            font-weight: bold;
+
+        /* Matching table styling */
+        .matching-table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 15px;
-            color: #333;
+            background-color: #fff;
         }
-        #next-button {
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 5px;
-            font-size: 1.1em;
-            cursor: pointer;
-            margin-top: 20px;
-            display: none; /* 初始隐藏 */
-            transition: background-color 0.3s ease;
+        .matching-table th, .matching-table td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 1em;
         }
-        #next-button:hover {
-            background-color: #5a6268;
-        }
-        .final-score-container {
-            font-size: 1.8em;
+        .matching-table th {
+            background-color: #f0f0f0;
+            color: #424242;
             font-weight: bold;
-            color: #28a745;
-            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .restart-button {
-            background-color: #ffc107;
-            color: #333;
-            border: none;
-            padding: 12px 25px;
+        .matching-table tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+        .matching-table tbody tr:hover {
+            background-color: #f0f5ff; /* Light blue on hover */
+        }
+        .matching-table select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 1.1em;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
+            font-size: 1em;
+            background-color: #f8f8f8;
         }
-        .restart-button:hover {
-            background-color: #e0a800;
+
+        /* Check Answer button styling */
+        .check-answer-button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .check-answer-button:hover {
+            background-color: #45a049;
+            transform: translateY(-1px);
+        }
+        .check-answer-button:active {
+            transform: translateY(0);
+        }
+        .check-answer-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Feedback styling */
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 0.95em;
+            min-height: 20px; /* Ensure space for feedback */
+        }
+        .feedback.correct {
+            color: #28a745; /* Green for correct */
+        }
+        .feedback.incorrect {
+            color: #dc3545; /* Red for incorrect */
+        }
+
+        /* Disabled input styling */
+        .question-section.answered input,
+        .question-section.answered select {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+        .question-section.answered label {
+            cursor: default;
+        }
+        .question-section.answered .options-list label:hover {
+            background-color: #eff3f6; /* Revert hover for answered questions */
+        }
+
+        /* Correct/Incorrect styling for options */
+        .options-list input[type="radio"]:checked + label.correct-option {
+            background-color: #d4edda; /* Light green for correct selected */
+            border-color: #28a745;
+        }
+        .options-list input[type="radio"]:checked + label.incorrect-option {
+            background-color: #f8d7da; /* Light red for incorrect selected */
+            border-color: #dc3545;
+        }
+        .options-list label.correct-answer {
+            background-color: #d4edda !important; /* Force light green for correct answer */
+            border-color: #28a745 !important;
+        }
+
+        /* For multi-blank questions, adjust input width if needed */
+        .fill-in-blank-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 5px; /* Space between words and inputs */
+        }
+        .fill-in-blank-container .fill-blank-input {
+            flex-grow: 1; /* Allow inputs to grow */
+            min-width: 80px; /* Minimum width for inputs */
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <h1>能源大挑战</h1>
-        <div id="game-screen">
-            <div id="question-text"></div>
-            <div class="options-container" id="options"></div>
-            <div id="feedback"></div>
-            <div id="score">得分: 0</div>
-            <button id="next-button">下一题</button>
+    <div class="container">
+        <h1>能源知识挑战</h1>
+        <div id="score-display">总得分: 0 / 0</div>
+
+        <div class="tabs-nav">
+            <button class="tab-button active" data-tab="tab1">1. 能的来源 (5题)</button>
+            <button class="tab-button" data-tab="tab2">2. 能的形式 (10题)</button>
+            <button class="tab-button" data-tab="tab3">3. 能的转换 (5题)</button>
+            <button class="tab-button" data-tab="tab4">4. 可更新和不可更新的能 (12题)</button>
+            <button class="tab-button" data-tab="tab5">5. 明智使用能源的重要性 (5题)</button>
         </div>
-        <div id="end-screen" style="display: none;">
-            <div class="final-score-container">
-                恭喜您完成所有挑战！您的最终得分是：<span id="final-score"></span>
-            </div>
-            <button class="restart-button" onclick="startGame()">重新开始</button>
+
+        <div class="tabs-content" id="tabs-content">
+            <!-- Tab content will be dynamically loaded here by JavaScript -->
         </div>
     </div>
 
     <script>
-        const questions = [
-            {
-                question: "以下哪种能源属于可再生能源？",
-                options: ["煤", "天然气", "风能", "核能"],
-                answer: "风能"
-            },
-            {
-                question: "太阳能通常转化为什么形式的能来为我们供电？",
-                options: ["机械能", "化学能", "电能", "核能"],
-                answer: "电能"
-            },
-            {
-                question: "燃煤发电过程中，煤的化学能主要转化为哪种能？",
-                options: ["光能", "电能", "声能", "核能"],
-                answer: "电能"
-            },
-            {
-                question: "水电站利用水的什么能来发电？",
-                options: ["热能", "化学能", "势能/动能", "光能"],
-                answer: "势能/动能"
-            },
-            {
-                question: "波浪能是一种利用海洋运动产生的可再生能源，它的主要能量形式是？",
-                options: ["热能", "机械能", "化学能", "核能"],
-                answer: "机械能"
-            },
-            {
-                question: "核电站利用原子核裂变释放出巨大的能量，这种能量形式是什么？",
-                options: ["化学能", "光能", "核能", "机械能"],
-                answer: "核能"
-            },
-            {
-                question: "生物质能来源于生物体，通过燃烧等方式转化为哪种主要能源形式？",
-                options: ["电能", "热能", "光能", "机械能"],
-                answer: "热能"
-            },
-            {
-                question: "以下哪种能源属于不可再生能源？",
-                options: ["太阳能", "生物质能", "石油", "水能"],
-                answer: "石油"
-            },
-            {
-                question: "当电灯泡发光时，电能主要转化为什么形式的能？",
-                options: ["声能", "机械能", "光能和热能", "化学能"],
-                answer: "光能和热能"
-            },
-            {
-                question: "风力发电是把风的什么能转化为电能？",
-                options: ["热能", "化学能", "机械能", "核能"],
-                answer: "机械能"
-            }
-        ];
+        // Define the questions data structure
+        const questionsData = {
+            "tab1": [
+                {
+                    id: "tab1-q1",
+                    type: "multiple-choice",
+                    question: "1. 以下哪种能源属于化石燃料？",
+                    options: ["太阳能", "风能", "天然气", "水能"],
+                    answer: "天然气"
+                },
+                {
+                    id: "tab1-q2",
+                    type: "multiple-choice",
+                    question: "2. 核燃料主要通过什么过程释放能量？",
+                    options: ["燃烧", "光合作用", "核裂变", "蒸发"],
+                    answer: "核裂变"
+                },
+                {
+                    id: "tab1-q3",
+                    type: "multiple-choice",
+                    question: "3. 风力发电站主要利用哪种自然现象来产生电能？",
+                    options: ["地震", "潮汐", "风", "太阳光"],
+                    answer: "风"
+                },
+                {
+                    id: "tab1-q4",
+                    type: "multiple-choice",
+                    question: "4. 水力发电和波浪能发电都利用了水的哪种特性？",
+                    options: ["温度", "压力", "运动", "颜色"],
+                    answer: "运动"
+                },
+                {
+                    id: "tab1-q5",
+                    type: "multiple-choice",
+                    question: "5. “沼气”（由有机物发酵产生的气体）属于哪一种能源？",
+                    options: ["化石燃料", "核燃料", "生物质能", "太阳能"],
+                    answer: "生物质能"
+                }
+            ],
+            "tab2": [
+                {
+                    id: "tab2-q1",
+                    type: "multiple-choice",
+                    question: "1. 当电灯泡发光时，电能主要转化为什么形式的能？",
+                    options: ["机械能和声能", "光能和热能", "化学能和光能", "核能和热能"],
+                    answer: "光能和热能"
+                },
+                {
+                    id: "tab2-q2",
+                    type: "multiple-choice",
+                    question: "2. 手机电池储存的能量属于哪种形式？",
+                    options: ["光能", "热能", "化学能", "机械能"],
+                    answer: "化学能"
+                },
+                {
+                    id: "tab2-q3",
+                    type: "multiple-choice",
+                    question: "3. 高速行驶的汽车具有的能量主要是？",
+                    options: ["热能", "动能", "声能", "光能"],
+                    answer: "动能"
+                },
+                {
+                    id: "tab2-q4",
+                    type: "multiple-choice",
+                    question: "4. 烧开水时，水温升高，这表明它吸收了什么形式的能？",
+                    options: ["光能", "电能", "热能", "化学能"],
+                    answer: "热能"
+                },
+                {
+                    id: "tab2-q5",
+                    type: "multiple-choice",
+                    question: "5. 雷电交加时，我们能看到闪光和听到雷声。闪光代表的能量形式是？",
+                    options: ["机械能", "光能", "声能", "核能"],
+                    answer: "光能"
+                },
+                {
+                    id: "tab2-q6",
+                    type: "fill-in-blank",
+                    question: "6. 太阳能电池板将太阳的____能直接转化为电能。",
+                    answer: "光"
+                },
+                {
+                    id: "tab2-q7",
+                    type: "fill-in-blank",
+                    question: "7. 水坝中高处的水具有____能，当水流下时转化为动能。",
+                    answer: "势"
+                },
+                {
+                    id: "tab2-q8",
+                    type: "fill-in-blank",
+                    question: "8. 食物为我们身体提供____能，使我们能够运动和思考。",
+                    answer: "化学"
+                },
+                {
+                    id: "tab2-q9",
+                    type: "fill-in-blank",
+                    question: "9. 声波的传播是靠介质的振动，因此声能是一种____能。",
+                    answer: "机械"
+                },
+                {
+                    id: "tab2-q10",
+                    type: "fill-in-blank",
+                    question: "10. 原子核内部蕴藏着巨大的____能，通过裂变或聚变释放。",
+                    answer: "核"
+                }
+            ],
+            "tab3": [
+                {
+                    id: "tab3-q1",
+                    type: "fill-in-blank-multi",
+                    question: "1. 植物通过光合作用将太阳的____能转化为自身的____能。",
+                    answers: ["光", "化学"]
+                },
+                {
+                    id: "tab3-q2",
+                    type: "fill-in-blank-multi",
+                    question: "2. 风力发电机将风的____能转化为____能。",
+                    answers: ["动", "电"]
+                },
+                {
+                    id: "tab3-q3",
+                    type: "fill-in-blank-multi",
+                    question: "3. 电水壶将____能转化为____能，使水温升高。",
+                    answers: ["电", "热"]
+                },
+                {
+                    id: "tab3-q4",
+                    type: "multiple-choice",
+                    question: "4. 手摇发电机发电时，主要发生了什么能量转换？",
+                    options: ["化学能转电能", "动能转电能", "光能转热能", "热能转动能"],
+                    answer: "动能转电能"
+                },
+                {
+                    id: "tab3-q5",
+                    type: "multiple-choice",
+                    question: "5. 以下哪种能量转换发生在热水器中？",
+                    options: ["电能转换为热能", "光能转换为化学能", "化学能转换为热能和光能", "机械能转换为电能"],
+                    answer: "电能转换为热能"
+                }
+            ],
+            "tab4": [
+                {
+                    id: "tab4-q1",
+                    type: "multiple-choice",
+                    question: "1. 以下哪项是不可更新能源？",
+                    options: ["太阳能", "天然气", "水能", "生物质能"],
+                    answer: "天然气"
+                },
+                {
+                    id: "tab4-q2",
+                    type: "multiple-choice",
+                    question: "2. 风能属于哪一类能源？",
+                    options: ["不可更新能源", "可更新能源", "核能", "化石燃料"],
+                    answer: "可更新能源"
+                },
+                {
+                    id: "tab4-q3",
+                    type: "multiple-choice",
+                    question: "3. 煤、石油和天然气都属于：",
+                    options: ["可更新能源", "清洁能源", "化石燃料", "新能源"],
+                    answer: "化石燃料"
+                },
+                {
+                    id: "tab4-q4",
+                    type: "multiple-choice",
+                    question: "4. 以下哪种能源在人类历史中被长期大量开采，储量有限？",
+                    options: ["生物质", "潮汐能", "核燃料", "太阳能"], // Changed "地热能" to "生物质"
+                    answer: "核燃料"
+                },
+                {
+                    id: "tab4-q5",
+                    type: "multiple-choice",
+                    question: "5. 被认为是“取之不尽，用之不竭”的能源是：",
+                    options: ["煤炭", "石油", "太阳能", "铀"],
+                    answer: "太阳能"
+                },
+                {
+                    id: "tab4-q6",
+                    type: "matching-dropdown",
+                    question: "请将左侧的能源与右侧的类型进行配对。",
+                    matches: [
+                        { left: "化石燃料", right: "不可更新能源" },
+                        { left: "核燃料", right: "不可更新能源" },
+                        { left: "生物质", right: "可更新能源" },
+                        { left: "水", right: "可更新能源" },
+                        { left: "风", right: "可更新能源" },
+                        { left: "太阳", right: "可更新能源" },
+                        { left: "海浪", right: "可更新能源" }
+                    ],
+                    // All possible right-side answers for the dropdowns
+                    allRightOptions: ["不可更新能源", "可更新能源"]
+                }
+            ],
+            "tab5": [
+                {
+                    id: "tab5-q1",
+                    type: "fill-in-blank",
+                    question: "1. 节约能源可以减少____的消耗，有利于环境保护。",
+                    answer: ["化石燃料", "资源"] // Allow multiple correct answers
+                },
+                {
+                    id: "tab5-q2",
+                    type: "fill-in-blank",
+                    question: "2. 提高能源利用效率是实现____发展的关键之一。",
+                    answer: "可持续"
+                },
+                {
+                    id: "tab5-q3",
+                    type: "fill-in-blank",
+                    question: "3. 过度依赖不可更新能源会导致____问题，如全球变暖。",
+                    answer: ["环境", "气候"] // Allow multiple correct answers
+                },
+                {
+                    id: "tab5-q4",
+                    type: "multiple-choice",
+                    question: "4. 以下哪项不是明智使用能源的表现？",
+                    options: ["随手关灯", "购买能效等级高的电器", "长期开启不使用的设备", "乘坐公共交通工具"],
+                    answer: "长期开启不使用的设备"
+                },
+                {
+                    id: "tab5-q5",
+                    type: "multiple-choice",
+                    question: "5. 为什么发展可再生能源对未来很重要？",
+                    options: ["可再生能源储量有限", "可再生能源价格昂贵", "有助于减少环境污染和应对资源枯竭", "可再生能源技术不成熟"],
+                    answer: "有助于减少环境污染和应对资源枯竭"
+                }
+            ]
+        };
 
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let answeredThisQuestion = false;
+        // Global state for scores and answered questions
+        let totalScore = 0;
+        let totalPossibleScore = 0;
+        // Keep track of answered state for each question
+        const questionStates = {}; // { "tab1-q1": { answered: false, correct: false, score: 0 } }
 
-        const questionTextElement = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options');
-        const feedbackElement = document.getElementById('feedback');
-        const scoreElement = document.getElementById('score');
-        const nextButton = document.getElementById('next-button');
-        const gameScreen = document.getElementById('game-screen');
-        const endScreen = document.getElementById('end-screen');
-        const finalScoreElement = document.getElementById('final-score');
-
-        function startGame() {
-            currentQuestionIndex = 0;
-            score = 0;
-            scoreElement.textContent = `得分: ${score}`;
-            gameScreen.style.display = 'block';
-            endScreen.style.display = 'none';
-            showQuestion();
-        }
-
-        function showQuestion() {
-            answeredThisQuestion = false;
-            feedbackElement.textContent = '';
-            nextButton.style.display = 'none';
-
-            if (currentQuestionIndex >= questions.length) {
-                endGame();
-                return;
-            }
-
-            const currentQuestion = questions[currentQuestionIndex];
-            questionTextElement.textContent = currentQuestion.question;
-            optionsContainer.innerHTML = ''; // 清空之前的选项
-
-            currentQuestion.options.forEach(option => {
-                const button = document.createElement('button');
-                button.textContent = option;
-                button.classList.add('option-button');
-                button.addEventListener('click', () => selectOption(option, currentQuestion.answer, button));
-                optionsContainer.appendChild(button);
-            });
-        }
-
-        function selectOption(selectedOption, correctAnswer, clickedButton) {
-            if (answeredThisQuestion) {
-                return; // 如果已经回答过，则不处理
-            }
-            answeredThisQuestion = true;
-
-            const allOptionButtons = optionsContainer.querySelectorAll('.option-button');
-            allOptionButtons.forEach(button => {
-                button.disabled = true; // 禁用所有按钮
-                if (button.textContent === correctAnswer) {
-                    button.classList.add('correct');
+        // Initialize question states and calculate total possible score
+        for (const tabId in questionsData) {
+            questionsData[tabId].forEach(q => {
+                questionStates[q.id] = { answered: false, correct: false, score: 0 };
+                if (q.type === "fill-in-blank-multi") {
+                    totalPossibleScore += q.answers.length;
+                } else if (q.type === "matching-dropdown") {
+                    totalPossibleScore += q.matches.length;
+                } else {
+                    totalPossibleScore += 1;
                 }
             });
+        }
 
-            if (selectedOption === correctAnswer) {
-                feedbackElement.textContent = '恭喜你，回答正确！';
-                feedbackElement.style.color = '#28a745';
-                score++;
-            } else {
-                feedbackElement.textContent = `很遗憾，回答错误。正确答案是：“${correctAnswer}”`;
-                feedbackElement.style.color = '#dc3545';
-                clickedButton.classList.add('wrong');
+        const scoreDisplayElement = document.getElementById('score-display');
+        const tabsContentElement = document.getElementById('tabs-content');
+
+        /**
+         * Updates the displayed score.
+         */
+        function updateScoreDisplay() {
+            scoreDisplayElement.textContent = `总得分: ${totalScore} / ${totalPossibleScore}`;
+        }
+
+        /**
+         * Renders questions for the active tab.
+         * @param {string} tabId - The ID of the tab to render.
+         */
+        function renderTabQuestions(tabId) {
+            const questions = questionsData[tabId];
+            let htmlContent = `<div id="${tabId}" class="tab-panel active"><h2>${document.querySelector(`.tab-button[data-tab="${tabId}"]`).textContent.split('(')[0]}</h2>`;
+
+            questions.forEach((q, index) => {
+                const questionHtmlId = `${tabId}-question-${index}`;
+                const state = questionStates[q.id];
+                const answeredClass = state.answered ? 'answered' : '';
+
+                htmlContent += `
+                    <div class="question-section ${answeredClass}" data-question-id="${q.id}">
+                        <span class="question-type">${q.type === 'multiple-choice' ? '选择题' : q.type === 'fill-in-blank' || q.type === 'fill-in-blank-multi' ? '填充题' : '配对题 (画线)'}</span>
+                        <p class="question-text">${q.question}</p>
+                `;
+
+                if (q.type === 'multiple-choice') {
+                    htmlContent += `<ol class="options-list" data-question-id="${q.id}">`;
+                    q.options.forEach((option, optIndex) => {
+                        const radioId = `${q.id}-option-${optIndex}`;
+                        htmlContent += `
+                            <li>
+                                <input type="radio" id="${radioId}" name="${q.id}-options" value="${option}" ${state.answered ? 'disabled' : ''}>
+                                <label for="${radioId}">${String.fromCharCode(65 + optIndex)}. ${option}</label>
+                            </li>
+                        `;
+                    });
+                    htmlContent += `</ol>`;
+                } else if (q.type === 'fill-in-blank') {
+                    const answerPlaceholder = q.question.replace('____', `<input type="text" class="fill-blank-input" data-question-id="${q.id}" value="${state.answered ? (state.correct ? q.answer : '') : ''}" ${state.answered ? 'disabled' : ''}>`);
+                    htmlContent += `<p class="question-text fill-in-blank-container">${answerPlaceholder}</p>`;
+                } else if (q.type === 'fill-in-blank-multi') {
+                    let multiBlankQuestion = q.question;
+                    for (let i = 0; i < q.answers.length; i++) {
+                        // Replace the first occurrence of '____'
+                        multiBlankQuestion = multiBlankQuestion.replace('____', `<input type="text" class="fill-blank-input" data-question-id="${q.id}" data-blank-index="${i}" value="${state.answered && state.correct ? q.answers[i] : ''}" ${state.answered ? 'disabled' : ''}>`);
+                    }
+                    htmlContent += `<p class="question-text fill-in-blank-container">${multiBlankQuestion}</p>`;
+                } else if (q.type === 'matching-dropdown') {
+                    htmlContent += `<table class="matching-table" data-question-id="${q.id}"><thead><tr><th>能源</th><th>类型</th></tr></thead><tbody>`;
+                    q.matches.forEach((match, matchIndex) => {
+                        htmlContent += `<tr><td>${match.left}</td><td>`;
+                        htmlContent += `<select data-question-id="${q.id}" data-match-index="${matchIndex}" ${state.answered ? 'disabled' : ''}>`;
+                        htmlContent += `<option value="">请选择</option>`;
+                        // Add all possible right options to the dropdown
+                        q.allRightOptions.forEach(option => {
+                            const selectedAttr = state.answered && state.correct && match.right === option ? 'selected' : '';
+                            htmlContent += `<option value="${option}" ${selectedAttr}>${option}</option>`;
+                        });
+                        htmlContent += `</select>`;
+                        htmlContent += `</td></tr>`;
+                    });
+                    htmlContent += `</tbody></table>`;
+                }
+
+                htmlContent += `
+                        <button class="check-answer-button" data-question-id="${q.id}" ${state.answered ? 'disabled' : ''}>检查答案</button>
+                        <div class="feedback" id="feedback-${q.id}"></div>
+                    </div>
+                `;
+            });
+
+            htmlContent += `</div>`; // Close tab-panel div
+            tabsContentElement.innerHTML = htmlContent; // Set content
+
+            // After rendering, attach event listeners for the current tab's questions
+            attachEventListeners(tabId);
+            updateScoreDisplay(); // Update score display after rendering
+        }
+
+        /**
+         * Attaches event listeners to the "Check Answer" buttons for the current tab.
+         * @param {string} tabId - The ID of the current tab.
+         */
+        function attachEventListeners(tabId) {
+            const currentTabPanel = document.getElementById(tabId);
+            if (!currentTabPanel) return;
+
+            const checkButtons = currentTabPanel.querySelectorAll('.check-answer-button');
+            checkButtons.forEach(button => {
+                button.onclick = (event) => {
+                    const questionId = event.target.dataset.questionId;
+                    checkAnswer(questionId);
+                };
+            });
+        }
+
+        /**
+         * Checks the answer for a specific question.
+         * @param {string} questionId - The ID of the question to check.
+         */
+        function checkAnswer(questionId) {
+            const question = findQuestionById(questionId);
+            if (!question || questionStates[question.id].answered) {
+                return; // Already answered
             }
-            scoreElement.textContent = `得分: ${score}`;
-            nextButton.style.display = 'block'; // 显示下一题按钮
+
+            let isCorrect = false;
+            let questionScore = 0;
+            const questionSection = document.querySelector(`.question-section[data-question-id="${questionId}"]`);
+            const feedbackElement = document.getElementById(`feedback-${questionId}`);
+            const checkButton = questionSection.querySelector('.check-answer-button');
+
+            // Reset feedback and styling
+            feedbackElement.textContent = '';
+            feedbackElement.className = 'feedback';
+            questionSection.classList.remove('answered');
+
+            if (question.type === 'multiple-choice') {
+                const selectedOption = questionSection.querySelector(`input[name="${question.id}-options"]:checked`);
+                if (selectedOption) {
+                    if (selectedOption.value === question.answer) {
+                        isCorrect = true;
+                        questionScore = 1;
+                    }
+
+                    // Apply styling to selected option
+                    const selectedLabel = selectedOption.nextElementSibling;
+                    if (isCorrect) {
+                        selectedLabel.classList.add('correct-option');
+                    } else {
+                        selectedLabel.classList.add('incorrect-option');
+                        // Highlight the correct answer
+                        const correctLabel = questionSection.querySelector(`input[value="${question.answer}"]`).nextElementSibling;
+                        if (correctLabel) {
+                            correctLabel.classList.add('correct-answer');
+                        }
+                    }
+                }
+            } else if (question.type === 'fill-in-blank') {
+                const input = questionSection.querySelector('.fill-blank-input');
+                const userAnswer = input.value.trim();
+                const correctAnswers = Array.isArray(question.answer) ? question.answer : [question.answer];
+
+                if (correctAnswers.some(ans => ans.toLowerCase() === userAnswer.toLowerCase())) {
+                    isCorrect = true;
+                    questionScore = 1;
+                }
+            } else if (question.type === 'fill-in-blank-multi') {
+                const inputs = questionSection.querySelectorAll('.fill-blank-input');
+                let blanksCorrect = 0;
+                inputs.forEach((input, index) => {
+                    const userAnswer = input.value.trim();
+                    const correctAnswer = question.answers[index];
+                    if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                        blanksCorrect++;
+                    }
+                });
+                if (blanksCorrect === question.answers.length) {
+                    isCorrect = true;
+                }
+                questionScore = blanksCorrect; // Each correct blank adds to score
+            } else if (question.type === 'matching-dropdown') {
+                const selects = questionSection.querySelectorAll('.matching-table select');
+                let matchesCorrect = 0;
+                selects.forEach(select => {
+                    const matchIndex = parseInt(select.dataset.matchIndex);
+                    const userAnswer = select.value;
+                    const correctAnswer = question.matches[matchIndex].right;
+
+                    if (userAnswer === correctAnswer) {
+                        matchesCorrect++;
+                    }
+                });
+                if (matchesCorrect === question.matches.length) {
+                    isCorrect = true;
+                }
+                questionScore = matchesCorrect; // Each correct match adds to score
+            }
+
+            // Update global score
+            if (!questionStates[question.id].answered) { // Only update score if not previously answered
+                totalScore += questionScore;
+            }
+
+            // Update question state
+            questionStates[question.id].answered = true;
+            questionStates[question.id].correct = isCorrect;
+            questionStates[question.id].score = questionScore;
+
+            // Display feedback
+            if (isCorrect) {
+                feedbackElement.textContent = '恭喜你，回答正确！';
+                feedbackElement.classList.add('correct');
+            } else {
+                feedbackElement.textContent = `很遗憾，回答错误。`;
+                feedbackElement.classList.add('incorrect');
+                // For fill-in-blank, show correct answer
+                if (question.type === 'fill-in-blank') {
+                    feedbackElement.textContent += ` 正确答案是：“${Array.isArray(question.answer) ? question.answer.join('/') : question.answer}”`;
+                } else if (question.type === 'fill-in-blank-multi') {
+                    feedbackElement.textContent += ` 正确答案是：${question.answers.map((ans, i) => `${i + 1}. ${ans}`).join('; ')}`;
+                } else if (question.type === 'matching-dropdown') {
+                     feedbackElement.textContent += ` 正确配对是：${question.matches.map(m => `${m.left} - ${m.right}`).join('; ')}`;
+                }
+            }
+
+            // Disable inputs and button after checking
+            questionSection.classList.add('answered');
+            const inputs = questionSection.querySelectorAll('input, select');
+            inputs.forEach(input => input.disabled = true);
+            checkButton.disabled = true;
+
+            updateScoreDisplay(); // Update score display after checking
         }
 
-        nextButton.addEventListener('click', () => {
-            currentQuestionIndex++;
-            showQuestion();
+        /**
+         * Finds a question object by its ID.
+         * @param {string} questionId - The ID of the question.
+         * @returns {object|null} The question object or null if not found.
+         */
+        function findQuestionById(questionId) {
+            for (const tabId in questionsData) {
+                const question = questionsData[tabId].find(q => q.id === questionId);
+                if (question) {
+                    return question;
+                }
+            }
+            return null;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabsNav = document.querySelector('.tabs-nav');
+            const tabButtons = tabsNav.querySelectorAll('.tab-button');
+
+            // Function to show a specific tab
+            function showTab(tabId) {
+                // Deactivate all buttons
+                tabButtons.forEach(button => button.classList.remove('active'));
+
+                // Activate the selected button
+                const activeButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+                if (activeButton) {
+                    activeButton.classList.add('active');
+                }
+
+                // Render questions for the selected tab
+                renderTabQuestions(tabId);
+            }
+
+            // Add click listeners to all tab buttons
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    showTab(tabId);
+                });
+            });
+
+            // Show the first tab by default on load
+            showTab('tab1');
         });
-
-        function endGame() {
-            gameScreen.style.display = 'none';
-            endScreen.style.display = 'block';
-            finalScoreElement.textContent = `${score} / ${questions.length}`;
-        }
-
-        // 首次加载时启动游戏
-        startGame();
     </script>
 </body>
 </html>
